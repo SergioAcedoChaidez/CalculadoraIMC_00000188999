@@ -5,58 +5,48 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import org.w3c.dom.Text
-import kotlin.math.pow
 
 class MainActivity : AppCompatActivity() {
-    //VARIABLES
-    val peso = findViewById<EditText>(R.id.etPeso)
-    val estatura = findViewById<EditText>(R.id.etEstatura)
-    val calculatebutton = findViewById<Button>(R.id.btnCalcular)
-    val Imc = findViewById<TextView>(R.id.tvIMC)
-    val Rango = findViewById<TextView>(R.id.tvRange)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var etPeso = findViewById<EditText>(R.id.etPeso)
+        val etEstatura = findViewById<EditText>(R.id.etEstatura)
+        val tvResultado = findViewById<TextView>(R.id.tvResultado)
+        val btnCalcular: Button = findViewById<Button>(R.id.btnCalcular)
+        //evento button o cliclistener
+        btnCalcular.setOnClickListener {
 
-        //evento boton
-        calculatebutton.setOnClickListener() {
+            val peso = etPeso.text.toString().toDouble()
+            val estatura = etEstatura.text.toString().toDouble()
+            val IMC = (peso/(estatura* estatura))
+            tvResultado.text = IMC.toString()
+            tvEstado(IMC)
 
-            var weightValue = 0.0
-            var heightValue = 0.0
-            if (peso.text.toString().isNotEmpty()) {
-                weightValue = peso.text.toString().toDouble()
 
             }
-            if (estatura.text.toString().isNotEmpty()) {
-                heightValue = estatura.text.toString().toDouble()
-            }
-            val bmiValue = String().format(".2f", weightValue / heightValue.pow(2))
-
-            Imc.text = bmiValue
-            Rango.text = bmiStatusValue(weightValue / heightValue.pow(2))
-
-        }
-
     }
+    //Funcion para asignar el estado
+    fun tvEstado(tvResultado:Double):String {
+        val tvEstado = findViewById<TextView>(R.id.tvEstado)
+        if(tvResultado < 18.5 )
+            tvEstado.text = "Bajo peso"
+        else if (tvResultado >= 18.5 && tvResultado < 25)
+            tvEstado.text = "Normal"
+        else if (tvResultado >= 25 && tvResultado <30)
+            tvEstado.text = "Sobrepeso"
+        else if (tvResultado >= 30 && tvResultado <35)
+            tvEstado.text = "Obesidad Grado 1"
+        else if (tvResultado >= 35 && tvResultado <40)
+            tvEstado.text = "Obesidad Grado 2"
+        else if (tvResultado >= 40)
+            tvEstado.text = "Obesidad Grado 3"
+        return tvEstado.toString()
 
-    private fun bmiStatusValue(bmi: Double): String {
-        lateinit var bmiStatus: String
-        if (bmi < 18.5)
-            bmiStatus = "Bajo peso"
-        else if (bmi >= 18.5 && bmi < 25)
-            bmiStatus = "Normal"
-        else if (bmi >= 25 && bmi < 30)
-            bmiStatus = "Sobrepeso"
-        else if (bmi >= 30 && bmi < 34.9)
-            bmiStatus = "Obesidad grado 1"
-        else if (bmi >= 35 && bmi < 39.9)
-            bmiStatus = "Obesidad grado 2"
-        else if (bmi > 40)
-            bmiStatus = "Obesidad grado 3"
-
-        return  bmiStatus
     }
 }
+
+
 
